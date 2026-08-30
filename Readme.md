@@ -54,9 +54,7 @@ The Silver data is transformed into a **Star Schema** consisting of one central 
 
 The workflow is:
 
-<p align="center">
-    <img src="https://github.com/ReehaKhan/youtube-data-pipeline/images/pipeline.png">
-</p>
+![pipeline.png]([URL_or_Path](https://github.com/ReehaKhan/youtube-data-pipeline/images/pipeline.png))
 
 ### Error Handling 
 If any major pipeline step fails, the Step Functions workflow catches the error and publishes a notification to an SNS topic.
