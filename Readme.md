@@ -110,3 +110,4 @@ Hiya! I'm **Reeha Khan**, a data scientist with 2.5 years of professional experi
 Feel free to connect with me:
 
 [![LinkedIn](https://img.icons8.com/?size=30&id=xuvGCOXi8Wyg&format=png&color=000000)](https://www.linkedin.com/in/reehakhan/)
+[![Email](https://img.icons8.com/?size=30&id=nQ4dZIRCI0nW&format=png&color=000000)](mailto:khanreeha22@gmail.com)
