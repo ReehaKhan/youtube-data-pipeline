@@ -44,7 +44,7 @@ The project follows a **Medallion Architecture** consisting of three layers:
 
 ### Data Modelling
 
-The Silver data is transformed into a **Star Schema** consisting of one central fact table and five dimension tables.
+In the Gold Layer, the data is transformed into a **Star Schema** consisting of one central fact table and five dimension tables.
 
 ![pipeline.png](https://github.com/ReehaKhan/youtube-data-pipeline/blob/master/images/star-schema.png)
 
