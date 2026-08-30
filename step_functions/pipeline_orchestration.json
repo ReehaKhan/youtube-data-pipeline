@@ -1,0 +1,237 @@
+{
+  "Comment": "YouTube MENA Most Popular Data Engineering Pipeline",
+  "StartAt": "YouTube API Ingestion",
+  "States": {
+
+    "YouTube API Ingestion": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "YOUR_LAMBDA_FUNCTION_ARN"
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException"
+          ],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 2,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "Set Lambda Failure"
+        }
+      ],
+      "Next": "Run Bronze Crawler"
+    },
+
+
+    "Set Lambda Failure": {
+      "Type": "Pass",
+      "Parameters": {
+        "failed_step": "YouTube API Ingestion",
+        "error.$": "$.error"
+      },
+      "Next": "Send Failure Notification"
+    },
+
+
+    "Run Bronze Crawler": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler",
+      "Parameters": {
+        "Name": "YOUR_BRONZE_CRAWLER_NAME"
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "Set Bronze Crawler Failure"
+        }
+      ],
+      "Next": "Wait for Bronze Crawler"
+    },
+
+
+    "Set Bronze Crawler Failure": {
+      "Type": "Pass",
+      "Parameters": {
+        "failed_step": "Bronze Crawler",
+        "error.$": "$.error"
+      },
+      "Next": "Send Failure Notification"
+    },
+
+
+    "Wait for Bronze Crawler": {
+      "Type": "Wait",
+      "Seconds": 30,
+      "Next": "Bronze to Silver"
+    },
+
+
+    "Bronze to Silver": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "YOUR_BRONZE_TO_SILVER_JOB_NAME"
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "Set Bronze to Silver Failure"
+        }
+      ],
+      "Next": "Run Silver Crawler"
+    },
+
+
+    "Set Bronze to Silver Failure": {
+      "Type": "Pass",
+      "Parameters": {
+        "failed_step": "Bronze to Silver Glue Job",
+        "error.$": "$.error"
+      },
+      "Next": "Send Failure Notification"
+    },
+
+
+    "Run Silver Crawler": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler",
+      "Parameters": {
+        "Name": "YOUR_SILVER_CRAWLER_NAME"
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "Set Silver Crawler Failure"
+        }
+      ],
+      "Next": "Wait for Silver Crawler"
+    },
+
+
+    "Set Silver Crawler Failure": {
+      "Type": "Pass",
+      "Parameters": {
+        "failed_step": "Silver Crawler",
+        "error.$": "$.error"
+      },
+      "Next": "Send Failure Notification"
+    },
+
+
+    "Wait for Silver Crawler": {
+      "Type": "Wait",
+      "Seconds": 30,
+      "Next": "Silver to Gold"
+    },
+
+
+    "Silver to Gold": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName": "YOUR_SILVER_TO_GOLD_JOB_NAME"
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "Set Silver to Gold Failure"
+        }
+      ],
+      "Next": "Run Gold Crawler"
+    },
+
+
+    "Set Silver to Gold Failure": {
+      "Type": "Pass",
+      "Parameters": {
+        "failed_step": "Silver to Gold Glue Job",
+        "error.$": "$.error"
+      },
+      "Next": "Send Failure Notification"
+    },
+
+
+    "Run Gold Crawler": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:glue:startCrawler",
+      "Parameters": {
+        "Name": "YOUR_GOLD_CRAWLER_NAME"
+      },
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.error",
+          "Next": "Set Gold Crawler Failure"
+        }
+      ],
+      "Next": "Wait for Gold Crawler"
+    },
+
+
+    "Set Gold Crawler Failure": {
+      "Type": "Pass",
+      "Parameters": {
+        "failed_step": "Gold Crawler",
+        "error.$": "$.error"
+      },
+      "Next": "Send Failure Notification"
+    },
+
+
+    "Wait for Gold Crawler": {
+      "Type": "Wait",
+      "Seconds": 30,
+      "Next": "Pipeline Successful"
+    },
+
+
+    "Pipeline Successful": {
+      "Type": "Succeed"
+    },
+
+
+    "Send Failure Notification": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "YOUR_SNS_TOPIC_ARN",
+        "Subject": "YouTube MENA Most Popular Data Pipeline FAILED",
+        "Message.$": "$.error.Cause"
+      },
+      "Next": "Pipeline Failed"
+    },
+
+
+    "Pipeline Failed": {
+      "Type": "Fail",
+      "Error": "YouTubePipelineFailed",
+      "Cause": "One or more pipeline steps failed."
+    }
+
+  }
+}
