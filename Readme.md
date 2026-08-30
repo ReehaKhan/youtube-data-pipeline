@@ -40,13 +40,13 @@ The pipeline currently covers:
 
 The project follows a **Medallion Architecture** consisting of three layers:
 
-inser img of meddalian bronze silver gold
+(insert img of meddalian bronze silver gold)
 
 ### Data Modelling
 
-The Silver data is transformed into a star schema consisting of one central fact table and five dimension tables.
+The Silver data is transformed into a **Star Schema** consisting of one central fact table and five dimension tables.
 
-inser img of star schema
+(insert img of star schema)
 
 ---
 
@@ -54,7 +54,9 @@ inser img of star schema
 
 The workflow is:
 
-insert img of pipeline
+<p align="center">
+    <img src="https://github.com/ReehaKhan/youtube-data-pipeline/images/pipeline.png">
+</p>
 
 ### Error Handling 
 If any major pipeline step fails, the Step Functions workflow catches the error and publishes a notification to an SNS topic.
@@ -80,18 +82,18 @@ The following AWS services are used throughout the pipeline:
 ---
 
 ## Repository Structure
-
-youtube-mena-most-popular/
-│
-├── lambda/
-│   └── youtube_api_ingestion.py
+```
+youtube-data-pipeline/
 │
 ├── etl_jobs/
 │   ├── bronze_to_silver.py
 │   └── silver_to_gold.py
 │
+├── lambda functions/
+│   └── youtube_api_ingestion.py
+│
 ├── step_functions/
-│   └── pipeline_definition.json
+│   └── pipeline_orchestration.json
 │
 ├── images/
 │   ├── medallion-architecture.png
@@ -99,6 +101,12 @@ youtube-mena-most-popular/
 │   └── pipeline.png
 │
 └── README.md
+```
 
 # About Me
 
+Hiya! I'm **Reeha Khan**, a data scientist with 2.5 years of professional experience. I spent 1 year working at a Think Tank on data-driven narratives for the Government of Pakistan and 1.5 years researching AI in healthcare with 2 publications. I'm passionate about all things data, and you'll find me learning new skills!! :)
+
+Feel free to connect with me:
+
+[![LinkedIn](https://img.icons8.com/?size=30&id=xuvGCOXi8Wyg&format=png&color=000000)](https://www.linkedin.com/in/reehakhan/)
