@@ -40,13 +40,13 @@ The pipeline currently covers:
 
 The project follows a **Medallion Architecture** consisting of three layers:
 
-(insert img of meddalian bronze silver gold)
+![pipeline.png](https://github.com/ReehaKhan/youtube-data-pipeline/blob/master/images/medallion-architecture.png)
 
 ### Data Modelling
 
 The Silver data is transformed into a **Star Schema** consisting of one central fact table and five dimension tables.
 
-(insert img of star schema)
+![pipeline.png](https://github.com/ReehaKhan/youtube-data-pipeline/blob/master/images/star-schema.png)
 
 ---
 
