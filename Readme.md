@@ -2,7 +2,7 @@
 
 An end-to-end AWS data engineering pipeline that collects and transforms YouTube's daily most-popular videos across countries in the MENA region.
 
-The project uses the YouTube Data API to collect the top 50 most-popular videos for each supported country every day. The data is processed through a Medallion Architecture (Bronze → Silver → Gold) and ultimately transformed into a star schema designed for analytics using Amazon Athena and Power BI.
+The pipeline is built entirely around **AWS data engineering services**. The project uses the YouTube Data API to collect the top 50 most-popular videos for each supported country every day. The data is processed through a Medallion Architecture (Bronze → Silver → Gold) and ultimately transformed into a star schema designed for analytics using Amazon Athena and Power BI.
 
 ---
 
@@ -42,7 +42,7 @@ The project follows a **Medallion Architecture** consisting of three layers:
 
 ![pipeline.png](https://github.com/ReehaKhan/youtube-data-pipeline/blob/master/images/medallion-architecture.png)
 
-### Data Modelling
+### Data Modeling
 
 In the Gold Layer, the data is transformed into a **Star Schema** consisting of one central fact table and five dimension tables.
 
